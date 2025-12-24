@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            font-family:monospace;
+            background-color: #f0f0f0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            background-image: url(waves-4493.gif);
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+        .main{
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            width:75%;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        .editor{
+            display: flex;
+            width:100%;
+            gap: 40px;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .editor .img-div{
+            width: 57%;
+        }
+        .editor .filter-div{
+            width: 42%;
+        }
+        .heading,.top-box{
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+        .heading h2{
+            font-family:monospace;
+            font-size: 22px;
+            color: #b90182;
+        }
+        .top-box h1{
+            width: 51.7%;
+            font-family:cursive;
+            font-size: 42px;
+            color: rgb(204, 7, 138);
+            margin: 0;
+        }
+        img{
+            border-radius: 100%;
+            width: 3.5%;
+            height: 31%;
+            margin-bottom: 0.6%;
+        }
+        .img-prev-box{
+            width: 100%;
+            height: 330px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #ffffff;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .img-prev-box img{
+            width: 100%;
+            height: 100%;
+            transition: filter 0.1s ease;
+        }
+        label{
+            font-weight: bold;
+        }
+        .control{
+            margin-bottom: 15px;
+        }
+        input[type="range"]{
+            width: 100%;
+            accent-color: red;
+            cursor: pointer;
+        }
+        button{
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            margin: 5px 0;
+            cursor: pointer;
+            font-size: 16px;
+            color: #fff;
+        }
+        .btn-row{
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        .reset-btn{
+            background: #999;
+            &:hover{
+                background: #000;
+            }
+        }
+        .download-btn{
+            background: #4caf50;
+        }
+        .save-btn{
+            background: #007bff;
+        }
+        .load-btn{
+            background-color: #ff9800;
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <div class="top-box">
+            <h1>Design Better. 
+                <br><span style="margin-left: 53%;">Edit Faster.</span>
+            </h1>
+            <img src="emoji-21936_128.gif">
+        </div>
+        <div class="editor">
+            <div class="img-div"> 
+                <div class="heading">
+                    <h2>Drop Image, See magic...!</h2>      
+                </div>
+                <input type="file" id="fileup" accept="image/*">
+                <br><br>
+
+                <div class="img-prev-box">
+                    <img id="image" src="" alt="prev img">
+                </div>
+            </div>
+            <div class="filter-div">
+                <div class="control">
+                    <label for="">Blur:</label> <output id="blurVal">0</output>px
+                    <input type="range" id="blur" min="0" max="20" value="0">  
+                </div>
+                <div class="control">
+                    <label for="">Brightness:</label> <output id="brightVal">100</output>%
+                    <input type="range" id="brightness" min="0" max="200" value="100">  
+                </div>
+                <div class="control">
+                    <label for="">Contrast:</label><output id="contrastVal">100</output>%
+                    <input type="range" id="contrast" min="0" max="200" value="100">
+                </div>
+                <div class="control">
+                    <label for="">Saturation:</label><output id="satVal">100</output>
+                    <input type="range" id="saturation" min="0" max="200" value="100">
+                </div>
+                <div class="control">
+                    <label for="">GrayScale:</label><output id="grayVal">0</output>
+                    <input type="range" id="grayscale" min="0" max="100" value="0">
+                </div>
+                <div class="control">
+                    <label for="">Opacity:</label><output id="opVal">100</output>
+                    <input type="range" id="opacity" min="0" max="100" value="100">
+                </div>
+
+                <div class="btn-row">
+                    <button class="reset-btn" id="reset">Reset</button>
+                    <button class="save-btn" id="saveSettings">Save</button>
+                    <button class="load-btn" id="loadSettings">Load Settings</button>
+                    <button class="download-btn" id="download">Download</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        //get image element where the fileuped picture will be displayed
+        const img = document.getElementById("image");
+
+        //get the file fileup input Element
+        const fileob = document.getElementById("fileup");
+
+        //slider element referances
+        //store all slider dom elements in an object for easy object access
+        const sliders = {
+            blur: document.getElementById("blur"),
+            brightness: document.getElementById("brightness"),
+            contrast: document.getElementById("contrast"),
+            saturation: document.getElementById("saturation"),
+            grayscale: document.getElementById("grayscale"),
+            opacity: document.getElementById("opacity")
+        };
+        const opacity = document.getElementById("opacity");
+
+         //Output element refrance
+         //store text output value that show current slider values
+        const labels = {
+            blurVal: document.getElementById("blurVal"),
+            brightVal: document.getElementById("brightVal"),
+            contrastVal: document.getElementById("contrastVal"),
+            satVal: document.getElementById("satVal"),
+            grayVal: document.getElementById("grayVal"),
+            opVal: document.getElementById("opVal")
+        };
+
+        //load image from user device ,when user selects an image file
+        fileob.addEventListener("change", ()=>{
+            //get the 1st file selected
+            const file = fileob.files[0];
+
+            //set image src to a temporary url so it appears instantly
+            img.src = URL.createObjectURL(file);
+        });
+
+        function updateFillters(){
+            labels.blurVal.textContent = sliders.blur.value;
+            labels.brightVal.textContent = sliders.brightness.value;
+            labels.contrastVal.textContent = sliders.contrast.value;
+            labels.satVal.textContent = sliders.saturation.value;
+            labels.grayVal.textContent = sliders.grayscale.value;
+            labels.opVal.textContent = sliders.opacity.value;
+
+            img.style.filter = `blur(${sliders.blur.value}px)
+                                brightness(${sliders.brightness.value}%)
+                                contrast(${sliders.contrast.value}%)
+                                saturate(${sliders.saturation.value}%)
+                                grayscale(${sliders.grayscale.value}%)`;
+
+            img.style.opacity = sliders.opacity.value/100;
+            console.log('fillter update');
+        }
+        Object.values(sliders).forEach(slider=>{
+            slider.addEventListener("input", updateFillters);
+            console.log('event attached');
+        });
+
+        //button  -1 reset filters to default values
+        document.getElementById("reset").addEventListener("click", ()=>{
+            sliders.blur.value = 0;
+            sliders.brightness.value = 100;
+            sliders.contrast.value = 100;
+            sliders.saturation.value = 100;
+            sliders.grayscale.value = 0;
+            sliders.opacity.value = 100;
+
+            //re-apply filters with default settings
+            updateFillters();
+        });
+        let ob;
+        //button-2 save settings to local storage
+        document.getElementById("saveSettings").addEventListener("click", ()=>{
+           //create an object to store all slider value
+            const settings = {};
+            //STORE each slider's value inside the setting object 
+            for(let key in sliders)
+            settings[key] = sliders[key].value;
+
+            ob.settings;
+
+            console.log(settings);
+            //save object as a json string in localstorage
+            localStorage.setItem("imageSettings", JSON.stringify(settings));
+            //converts a js object into json string for saving to files or printing
+            alert("Settings saved");
+        });
+        //load settings from local storage
+        document.getElementById("loadSettings").addEventListener("click", ()=>{
+            const settings = JSON.parse(localStorage.getItem("imageSettings"));
+
+            //if no setting found show alert
+            if(!settings)
+                return alert("No saved settings found");
+            //apply saved value to each slider
+            for(let key in sliders)
+                sliders[key].value = settings[key];
+
+            //update image filters to reflect loaded settings
+            updateFillters();
+        });
+        //download the edited image
+        document.getElementById("download").addEventListener("click", ()=>{
+            //create an empty canvas element
+            const canvas = document.createElement("canvas");
+
+            //get drawing context
+            const ctx = canvas.getContext("2d");
+
+            //set canvas size equal to original image resolution
+            canvas.width = img.naturalWidth;
+            canvas.height = img.naturalHeight;
+
+            //apply same filter to canvas context
+            ctx.filter = `blur(${sliders.blur.value}px)
+                            brightness(${sliders.brightness.value}%)
+                            contrast(${sliders.contrast.value}%)
+                            saturate(${sliders.saturation.value}%)
+                            grayscale(${sliders.grayscale.value}%)`;
+
+            //apply opacity to drawing context
+            ctx.globalAlpha = sliders.opacity.value / 100;
+            //draw edited image onto the canvas
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            //create download link
+            const link = document.createElement("a");
+            link.download = "edited-image.png"; // image downloaded with this name
+            //convert the content of canvas element into base64-encoded image 
+            link.href = canvas.toDataURL();
+            //into plain text using 64 safe charecters:A-Z,a-z,0-9, + and /
+            //trigger the dowload
+            link.click();
+        });
+        //initialize
+        updateFillters();
+    </script>
+</body>
+</html>

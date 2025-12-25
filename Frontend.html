@@ -7,7 +7,7 @@
     <style>
         body{
             font-family:monospace;
-            background-color: #f0f0f0;
+            background-color: #ffffff;
             padding: 20px;
             display: flex;
             justify-content: center;
@@ -55,8 +55,10 @@
             color: rgb(204, 7, 138);
             margin: 0;
         }
+        .top-box img{
+            border-radius: 50%;
+        }
         img{
-            border-radius: 100%;
             width: 3.5%;
             height: 31%;
             margin-bottom: 0.6%;
@@ -95,7 +97,7 @@
             margin: 5px 0;
             cursor: pointer;
             font-size: 16px;
-            color: #fff;
+            color: #000000;
         }
         .btn-row{
             display: flex;
@@ -257,9 +259,9 @@
             for(let key in sliders)
             settings[key] = sliders[key].value;
 
-            ob.settings;
+           // ob.settings;
 
-            console.log(settings);
+            //console.log(settings);
             //save object as a json string in localstorage
             localStorage.setItem("imageSettings", JSON.stringify(settings));
             //converts a js object into json string for saving to files or printing
